@@ -5,6 +5,11 @@ import org.lwjgl.opengl.GL20.glDisableVertexAttribArray
 import org.lwjgl.opengl.GL20.glEnableVertexAttribArray
 import org.lwjgl.opengl.GL30.glBindVertexArray
 
+data class RawMesh(
+    val vertices: List<Vertex>,
+    val indices: List<Int>
+)
+
 class Mesh(
     private val vao: Int,
     private val vertexCount: Int

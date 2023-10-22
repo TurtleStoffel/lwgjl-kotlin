@@ -5,11 +5,6 @@ import org.joml.Vector3i
 
 typealias Face = Vector3i
 
-data class RawMesh(
-    val vertices: List<Vertex>,
-    val indices: List<Int>
-)
-
 class SphereBuilder(private val depth: Int = 1) {
     private val vertices = mutableListOf<Vertex>()
 
