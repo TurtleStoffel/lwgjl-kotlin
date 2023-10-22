@@ -14,8 +14,7 @@ class SphereBuilder(private val depth: Int = 1) {
     fun build(): Mesh {
         val rawMesh = generate(depth)
 
-        val vao = generateVao(rawMesh.vertices, rawMesh.indices)
-        return Mesh(vao, rawMesh.indices.size)
+        return Mesh.build(rawMesh)
     }
 
     private fun generate(depth: Int = 1): RawMesh {

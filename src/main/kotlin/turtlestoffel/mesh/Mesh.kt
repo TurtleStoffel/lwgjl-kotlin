@@ -10,10 +10,17 @@ data class RawMesh(
     val indices: List<Int>
 )
 
-class Mesh(
+class Mesh private constructor(
     private val vao: Int,
     private val vertexCount: Int
 ) {
+    companion object {
+        fun build(rawMesh: RawMesh) : Mesh {
+            val vao = generateVao(rawMesh.vertices, rawMesh.indices)
+            return Mesh(vao, rawMesh.indices.size)
+        }
+    }
+
     fun render() {
         glBindVertexArray(vao)
         glEnableVertexAttribArray(0)
