@@ -5,6 +5,11 @@ import org.joml.Vector3i
 
 typealias Face = Vector3i
 
+data class RawMesh(
+    val vertices: List<Vertex>,
+    val indices: List<Int>
+)
+
 class SphereBuilder(private val depth: Int = 1) {
     private val vertices = mutableListOf<Vertex>()
 
@@ -12,10 +17,13 @@ class SphereBuilder(private val depth: Int = 1) {
     private var vertexIndex = 0
 
     fun build(): Mesh {
-        return generate(depth)
+        val rawMesh = generate(depth)
+
+        val vao = generateVao(rawMesh.vertices, rawMesh.indices)
+        return Mesh(vao, rawMesh.indices.size)
     }
 
-    private fun generate(depth: Int = 1): Mesh {
+    private fun generate(depth: Int = 1): RawMesh {
         vertices.addAll(Icosahedron.vertices)
         var faces = listOf(*Icosahedron.faces)
 
@@ -36,9 +44,9 @@ class SphereBuilder(private val depth: Int = 1) {
             }
         }
 
+
         val indices = faces.flatMap { listOf(it.x, it.y, it.z) }
-        val vao = generateVao(vertices, indices)
-        return Mesh(vao, indices.size)
+        return RawMesh(vertices, indices)
     }
 
     private fun getMidpoint(p1: Int, p2: Int): Int {

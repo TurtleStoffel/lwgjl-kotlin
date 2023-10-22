@@ -101,7 +101,7 @@ class Engine(
         val shader = Shader.createShader()
 
         glEnable(GL_CULL_FACE)
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE)
+        glPolygonMode(GL_FRONT_AND_BACK, GL_POLYGON)
 
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
