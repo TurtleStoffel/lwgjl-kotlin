@@ -13,7 +13,6 @@ class SphereBuilder(private val depth: Int = 1) {
 
     fun build(): Mesh {
         val rawMesh = generate(depth)
-
         return Mesh.build(rawMesh)
     }
 
