@@ -115,11 +115,7 @@ class Engine(
             val mvpLocation = glGetUniformLocation(shader, "MVP")
             glUniformMatrix4fv(mvpLocation, false, viewProjectionMatrix)
 
-            glBindVertexArray(mesh.vao)
-            glEnableVertexAttribArray(0)
-            glDrawElements(GL_TRIANGLES, mesh.vertexCount, GL_UNSIGNED_INT, 0)
-            glDisableVertexAttribArray(0)
-            glBindVertexArray(0)
+            mesh.render()
 
             val timeDifference = glfwGetTime() - frameTime
             println("Time since last frame: $timeDifference")
