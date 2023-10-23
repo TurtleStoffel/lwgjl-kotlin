@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL30.glBindVertexArray
 import org.lwjgl.opengl.GL30.glEnableVertexAttribArray
 import org.lwjgl.system.MemoryUtil.NULL
 import turtlestoffel.mesh.PlaneBuilder
+import turtlestoffel.mesh.RoofBuilder
 import turtlestoffel.mesh.SphereBuilder
 
 private fun createWindow(): Long {
@@ -98,7 +99,8 @@ class Engine(
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f)
 
         //val mesh = SphereBuilder().build()
-        val mesh = PlaneBuilder().build()
+        //val mesh = PlaneBuilder().build()
+        val mesh = RoofBuilder().build()
 
         val shader = Shader.createShader()
 
