@@ -99,8 +99,8 @@ class Engine(
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f)
 
         //val mesh = SphereBuilder().build()
-        val mesh = PlaneBuilder().build()
-        //val mesh = RoofBuilder().build()
+        //val mesh = PlaneBuilder().build()
+        val mesh = RoofBuilder().build()
 
         val shader = Shader.createShader()
 
