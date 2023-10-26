@@ -10,8 +10,8 @@ import kotlin.math.PI
 const val CAMERA_SPEED = 0.1f
 
 class Camera {
-    private val position = Vector3f(0.0f, -5.0f, 1.0f)
-    private val centerOffset = Vector3f(0.0f, 5.0f, -1.0f)
+    private val position = Vector3f(0.0f, -5.0f, 3.0f)
+    private val centerOffset = Vector3f(0.0f, 5.0f, -3.0f)
 
     private val direction = Vector3f(0.0f, 0.0f, 0.0f)
 
