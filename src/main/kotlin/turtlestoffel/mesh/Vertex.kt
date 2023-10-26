@@ -1,6 +1,7 @@
 package turtlestoffel.mesh
 
 import org.joml.Vector3f
+import turtlestoffel.randomColor
 
 const val VERTEX_FLOAT_COUNT = 9
 const val VERTEX_BYTE_SIZE = VERTEX_FLOAT_COUNT * Float.SIZE_BYTES
@@ -12,5 +13,5 @@ const val VERTEX_COLOR_OFFSET = (6 * Float.SIZE_BYTES).toLong()
 data class Vertex(
     val position: Vector3f,
     val normal: Vector3f,
-    val color: Vector3f = Vector3f(1.0f, 0.0f, 0.0f),
+    val color: Vector3f = randomColor(),
 )

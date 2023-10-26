@@ -1,19 +1,30 @@
 package turtlestoffel.mesh
 
 import org.joml.Vector3f
+import turtlestoffel.randomColor
 
 class PlaneBuilder {
     fun build(): Mesh {
         val originalVertex = Vertex(
             position = Vector3f(-1.0f, -1.0f, 0.0f),
             normal = Vector3f(0.0f, 0.0f, 1.0f),
-            color = Vector3f(1.0f, 0.0f, 0.0f)
         )
         val vertices = listOf(
-            originalVertex.copy(),
-            originalVertex.copy(position = Vector3f(1.0f, 1.0f, 0.0f)),
-            originalVertex.copy(position = Vector3f(1.0f, -1.0f, 0.0f)),
-            originalVertex.copy(position = Vector3f(-1.0f, 1.0f, 0.0f)),
+            originalVertex.copy(
+                color = randomColor()
+            ),
+            originalVertex.copy(
+                position = Vector3f(1.0f, 1.0f, 0.0f),
+                color = randomColor()
+            ),
+            originalVertex.copy(
+                position = Vector3f(1.0f, -1.0f, 0.0f),
+                color = randomColor()
+            ),
+            originalVertex.copy(
+                position = Vector3f(-1.0f, 1.0f, 0.0f),
+                color = randomColor()
+            ),
         )
         val indices = listOf(
             0, 2, 1,
