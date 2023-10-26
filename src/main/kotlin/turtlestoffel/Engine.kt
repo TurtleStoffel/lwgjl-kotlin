@@ -107,6 +107,8 @@ class Engine(
         glEnable(GL_CULL_FACE)
         glPolygonMode(GL_FRONT_AND_BACK, GL_POLYGON)
 
+        glEnable(GL_DEPTH_TEST)
+
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
         while (!glfwWindowShouldClose(window)) {
