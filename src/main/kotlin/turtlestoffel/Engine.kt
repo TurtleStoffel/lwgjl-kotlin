@@ -1,16 +1,13 @@
 package turtlestoffel
 
+import org.lwjgl.BufferUtils
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.glfw.GLFWKeyCallback
 import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL20.*
-import org.lwjgl.opengl.GL30.glBindVertexArray
-import org.lwjgl.opengl.GL30.glEnableVertexAttribArray
 import org.lwjgl.system.MemoryUtil.NULL
 import turtlestoffel.mesh.PlaneBuilder
-import turtlestoffel.mesh.RoofBuilder
-import turtlestoffel.mesh.SphereBuilder
 
 private fun createWindow(): Long {
     // Initialize GLFW. Most GLFW functions will not work before doing this.
@@ -99,8 +96,14 @@ class Engine(
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f)
 
         //val mesh = SphereBuilder().build()
-        //val mesh = PlaneBuilder().build()
-        val mesh = RoofBuilder().build()
+        val mesh = PlaneBuilder().build()
+        //val mesh = RoofBuilder().build()
+
+        val leftPlane = GameObject(mesh)
+        leftPlane.modelMatrix.translate(-3f, 0f, 0f)
+
+        val rightPlane = GameObject(mesh)
+        rightPlane.modelMatrix.translate(3f, 0f, 0f)
 
         val shader = Shader.createShader()
 
@@ -118,9 +121,15 @@ class Engine(
             camera.update()
 
             val viewProjectionMatrix = camera.getViewProjectionMatrix()
-            val mvpLocation = glGetUniformLocation(shader, "MVP")
+            val mvpLocation = glGetUniformLocation(shader, "viewProjectionMatrix")
             glUniformMatrix4fv(mvpLocation, false, viewProjectionMatrix)
 
+            val modelMatrixLocation = glGetUniformLocation(shader, "modelMatrix")
+
+            glUniformMatrix4fv(modelMatrixLocation, false, leftPlane.modelMatrix.get(BufferUtils.createFloatBuffer(16)))
+            mesh.render()
+
+            glUniformMatrix4fv(modelMatrixLocation, false, rightPlane.modelMatrix.get(BufferUtils.createFloatBuffer(16)))
             mesh.render()
 
             val timeDifference = glfwGetTime() - frameTime
