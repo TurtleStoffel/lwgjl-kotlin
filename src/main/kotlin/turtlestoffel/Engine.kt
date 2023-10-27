@@ -96,13 +96,12 @@ class Engine(
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f)
 
         //val mesh = SphereBuilder().build()
-        val mesh = PlaneBuilder().build()
         //val mesh = RoofBuilder().build()
 
-        val leftPlane = GameObject(mesh)
+        val leftPlane = GameObject(PlaneBuilder().build())
         leftPlane.modelMatrix.translate(-3f, 0f, 0f)
 
-        val rightPlane = GameObject(mesh)
+        val rightPlane = GameObject(PlaneBuilder().build())
         rightPlane.modelMatrix.translate(3f, 0f, 0f)
 
         val shader = Shader.createShader()
@@ -127,10 +126,10 @@ class Engine(
             val modelMatrixLocation = glGetUniformLocation(shader, "modelMatrix")
 
             glUniformMatrix4fv(modelMatrixLocation, false, leftPlane.modelMatrix.get(BufferUtils.createFloatBuffer(16)))
-            mesh.render()
+            leftPlane.mesh.render()
 
             glUniformMatrix4fv(modelMatrixLocation, false, rightPlane.modelMatrix.get(BufferUtils.createFloatBuffer(16)))
-            mesh.render()
+            rightPlane.mesh.render()
 
             val timeDifference = glfwGetTime() - frameTime
             println("Time since last frame: $timeDifference")
