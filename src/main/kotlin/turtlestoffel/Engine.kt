@@ -7,8 +7,6 @@ import org.lwjgl.glfw.GLFWKeyCallback
 import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL20.*
 import org.lwjgl.system.MemoryUtil.NULL
-import turtlestoffel.mesh.PlaneBuilder
-import turtlestoffel.mesh.RoofBuilder
 import turtlestoffel.mesh.SphereBuilder
 
 private fun createWindow(): Long {
@@ -100,11 +98,11 @@ class Engine(
         //val mesh = SphereBuilder().build()
         //val mesh = RoofBuilder().build()
 
-        val leftPlane = GameObject(SphereBuilder().build())
-        leftPlane.modelMatrix.translate(-3f, 0f, 0f)
+        val leftMesh = GameObject(SphereBuilder().build())
+        leftMesh.modelMatrix.translate(-3f, 0f, 0f)
 
-        val rightPlane = GameObject(SphereBuilder().build())
-        rightPlane.modelMatrix.translate(3f, 0f, 0f)
+        val rightMesh = GameObject(SphereBuilder().build())
+        rightMesh.modelMatrix.translate(3f, 0f, 0f)
 
         val shader = Shader.createShader()
 
@@ -127,11 +125,11 @@ class Engine(
 
             val modelMatrixLocation = glGetUniformLocation(shader, "modelMatrix")
 
-            glUniformMatrix4fv(modelMatrixLocation, false, leftPlane.modelMatrix.get(BufferUtils.createFloatBuffer(16)))
-            leftPlane.mesh.render()
+            glUniformMatrix4fv(modelMatrixLocation, false, leftMesh.modelMatrix.get(BufferUtils.createFloatBuffer(16)))
+            leftMesh.mesh.render()
 
-            glUniformMatrix4fv(modelMatrixLocation, false, rightPlane.modelMatrix.get(BufferUtils.createFloatBuffer(16)))
-            rightPlane.mesh.render()
+            glUniformMatrix4fv(modelMatrixLocation, false, rightMesh.modelMatrix.get(BufferUtils.createFloatBuffer(16)))
+            rightMesh.mesh.render()
 
             val timeDifference = glfwGetTime() - frameTime
             println("Time since last frame: $timeDifference")
