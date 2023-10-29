@@ -99,10 +99,10 @@ class Engine(
         //val mesh = RoofBuilder().build()
 
         val leftMesh = GameObject(SphereBuilder().build())
-        leftMesh.modelMatrix.translate(-3f, 0f, 0f)
+        leftMesh.translationVector.set(-3f, 0f, 0f)
 
         val rightMesh = GameObject(SphereBuilder().build())
-        rightMesh.modelMatrix.translate(3f, 0f, 0f)
+        rightMesh.translationVector.set(3f, 0f, 0f)
 
         val shader = Shader.createShader()
 
@@ -119,9 +119,10 @@ class Engine(
             glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
 
             // --- Animation
+            val time = glfwGetTime()
             camera.update()
-            leftMesh.update()
-            rightMesh.update()
+            leftMesh.update(time)
+            rightMesh.update(time)
 
             val viewProjectionMatrix = camera.getViewProjectionMatrix()
             val mvpLocation = glGetUniformLocation(shader, "viewProjectionMatrix")
