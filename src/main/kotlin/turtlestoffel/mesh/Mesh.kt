@@ -22,7 +22,7 @@ class Mesh private constructor(
                 vertices = rawMesh.indices.map { rawMesh.vertices[it] },
                 indices = rawMesh.indices.indices.toList()
             )
-            denormalizedMesh = updateNormals(denormalizedMesh)
+            denormalizedMesh = generateFlatShadingMesh(denormalizedMesh)
             val normalMesh = generateNormalMesh(denormalizedMesh)
 
             val vao = generateVao(denormalizedMesh.vertices, denormalizedMesh.indices)
