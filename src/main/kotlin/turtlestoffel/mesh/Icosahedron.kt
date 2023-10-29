@@ -27,7 +27,8 @@ class Icosahedron {
             return Vertex(
                 position = position,
                 // Position and normal are the same for a sphere
-                normal = position
+                normal = position,
+                color = Vector3f(1.0f, 0.0f, 0.0f)
             )
         }
 

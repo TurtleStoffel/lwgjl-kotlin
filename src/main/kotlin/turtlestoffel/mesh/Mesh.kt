@@ -1,6 +1,5 @@
 package turtlestoffel.mesh
 
-import org.joml.Vector3f
 import org.lwjgl.opengl.GL11.*
 import org.lwjgl.opengl.GL20.glDisableVertexAttribArray
 import org.lwjgl.opengl.GL20.glEnableVertexAttribArray
@@ -19,10 +18,11 @@ class Mesh private constructor(
 ) {
     companion object {
         fun build(rawMesh: RawMesh) : Mesh {
-            val denormalizedMesh = RawMesh(
+            var denormalizedMesh = RawMesh(
                 vertices = rawMesh.indices.map { rawMesh.vertices[it] },
                 indices = rawMesh.indices.indices.toList()
             )
+            denormalizedMesh = updateNormals(denormalizedMesh)
             val normalMesh = generateNormalMesh(denormalizedMesh)
 
             val vao = generateVao(denormalizedMesh.vertices, denormalizedMesh.indices)

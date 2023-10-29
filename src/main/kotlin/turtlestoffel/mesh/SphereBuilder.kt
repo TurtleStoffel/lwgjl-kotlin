@@ -62,7 +62,8 @@ class SphereBuilder(private val depth: Int = 1) {
         val midpoint = Vertex(
             position = position,
             // Position and normal are the same for a sphere
-            normal = position
+            normal = Vector3f(position),
+            color = Vector3f(1.0f, 0.0f, 0.0f)
         )
 
         vertices.add(midpoint)

@@ -2,6 +2,33 @@ package turtlestoffel.mesh
 
 import org.joml.Vector3f
 
+fun updateNormals(mesh: RawMesh): RawMesh {
+    val vertices = mesh.vertices.flatMapIndexed { index: Int, _: Vertex ->
+        // Only calculate per triangle which starts on every 3rd vertex
+        if (index % 3 != 0) {
+            return@flatMapIndexed listOf()
+        }
+
+        val normal = calculateNormal(
+            mesh.vertices[index].position,
+            mesh.vertices[index + 1].position,
+            mesh.vertices[index + 2].position,
+        )
+
+        // Update the normal of each vertex in the Triangle
+        return@flatMapIndexed 0.until(3).map {
+            mesh.vertices[index + it].copy(
+                normal = normal
+            )
+        }
+    }
+
+    return RawMesh(
+        vertices = vertices,
+        indices = mesh.indices
+    )
+}
+
 fun generateNormalMesh(sourceMesh: RawMesh): RawMesh {
     val normalVertices = sourceMesh.vertices.flatMapIndexed { index: Int, _: Vertex ->
         // Only calculate per triangle which starts on every 3rd vertex
