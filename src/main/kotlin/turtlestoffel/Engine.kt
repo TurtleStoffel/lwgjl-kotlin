@@ -8,6 +8,7 @@ import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL20.*
 import org.lwjgl.system.MemoryUtil.NULL
 import turtlestoffel.mesh.PlaneBuilder
+import turtlestoffel.mesh.RoofBuilder
 
 private fun createWindow(): Long {
     // Initialize GLFW. Most GLFW functions will not work before doing this.
@@ -98,10 +99,10 @@ class Engine(
         //val mesh = SphereBuilder().build()
         //val mesh = RoofBuilder().build()
 
-        val leftPlane = GameObject(PlaneBuilder().build())
+        val leftPlane = GameObject(RoofBuilder().build())
         leftPlane.modelMatrix.translate(-3f, 0f, 0f)
 
-        val rightPlane = GameObject(PlaneBuilder().build())
+        val rightPlane = GameObject(RoofBuilder().build())
         rightPlane.modelMatrix.translate(3f, 0f, 0f)
 
         val shader = Shader.createShader()
