@@ -42,7 +42,7 @@ class Engine(
     private var keyCallback : GLFWKeyCallback? = null
 
     private val camera = Camera()
-    private var frameTime = glfwGetTime()
+    private val frameCounter = FrameCounter()
 
     private fun init() {
         // Set up an error callback. The default implementation
@@ -131,10 +131,7 @@ class Engine(
             glUniformMatrix4fv(modelMatrixLocation, false, rightMesh.modelMatrix.get(BufferUtils.createFloatBuffer(16)))
             rightMesh.mesh.render()
 
-            val timeDifference = glfwGetTime() - frameTime
-            println("Time since last frame: $timeDifference")
-            println("FPS: ${1/timeDifference}")
-            frameTime = glfwGetTime()
+            frameCounter.update()
 
             // Swap the color buffers
             glfwSwapBuffers(window)
