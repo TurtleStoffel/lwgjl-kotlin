@@ -114,15 +114,20 @@ class Engine(
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
         while (!glfwWindowShouldClose(window)) {
+            // --- Frame preparation
             // Clear the framebuffer
             glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
 
+            // --- Animation
             camera.update()
+            leftMesh.update()
+            rightMesh.update()
 
             val viewProjectionMatrix = camera.getViewProjectionMatrix()
             val mvpLocation = glGetUniformLocation(shader, "viewProjectionMatrix")
             glUniformMatrix4fv(mvpLocation, false, viewProjectionMatrix)
 
+            // --- Render
             val modelMatrixLocation = glGetUniformLocation(shader, "modelMatrix")
 
             glUniformMatrix4fv(modelMatrixLocation, false, leftMesh.modelMatrix.get(BufferUtils.createFloatBuffer(16)))
@@ -131,6 +136,7 @@ class Engine(
             glUniformMatrix4fv(modelMatrixLocation, false, rightMesh.modelMatrix.get(BufferUtils.createFloatBuffer(16)))
             rightMesh.mesh.render()
 
+            // --- Frame finalization
             frameCounter.update()
 
             // Swap the color buffers
