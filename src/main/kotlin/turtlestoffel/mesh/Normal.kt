@@ -15,37 +15,21 @@ fun generateNormalMesh(sourceMesh: RawMesh): RawMesh {
             sourceMesh.vertices[index + 2].position,
         )
 
-        val vertex1 = sourceMesh.vertices[index].copy()
-        val position12 = Vector3f()
-        vertex1.position.add(normal, position12)
-        val vertex12 = vertex1.copy(
-            position = position12
-        )
-
-        val vertex2 = sourceMesh.vertices[index + 1].copy()
-        val position22 = Vector3f()
-        vertex2.position.add(normal, position22)
-        val vertex22 = vertex2.copy(
-            position = position22
-        )
-
-        val vertex3 = sourceMesh.vertices[index + 2].copy()
-        val position32 = Vector3f()
-        vertex3.position.add(normal, position32)
-        val vertex32 = vertex3.copy(
-            position = position32
-        )
-
-        listOf(
-            vertex1,
-            vertex12,
-            vertex2,
-            vertex22,
-            vertex3,
-            vertex32
-        )
-
-
+        /**
+         * Generate the normal vertices (p, p+N) for each vertex
+         */
+        return@flatMapIndexed 0.until(3).flatMap {i ->
+            val vertex = sourceMesh.vertices[index + i].copy()
+            val position2 = Vector3f()
+            vertex.position.add(normal, position2)
+            val vertex12 = vertex.copy(
+                position = position2
+            )
+            listOf(
+                vertex,
+                vertex12
+            )
+        }
     }
 
     val normalIndices = normalVertices.indices.toList()
