@@ -1,5 +1,6 @@
 package turtlestoffel.mesh
 
+import org.joml.SimplexNoise
 import org.joml.Vector3f
 import org.joml.Vector3i
 
@@ -13,6 +14,13 @@ class SphereBuilder(private val depth: Int = 1) {
 
     fun build(): Mesh {
         val rawMesh = generate(depth)
+
+        rawMesh.vertices.forEach {
+            it.position.add(Vector3f(
+                SimplexNoise.noise(it.position.x, it.position.y, it.position.z) / 5
+            ))
+        }
+
         return Mesh.build(rawMesh)
     }
 

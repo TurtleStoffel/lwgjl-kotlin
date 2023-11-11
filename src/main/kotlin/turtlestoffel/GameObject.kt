@@ -14,6 +14,6 @@ class GameObject(val mesh: Mesh) {
         val translation = sin(time*10).toFloat()
         bounceVector.set(0.0f, 0.0f, translation)
 
-        modelMatrix.identity().translate(translationVector).translate(bounceVector)
+        modelMatrix.identity().translate(translationVector)/*.translate(bounceVector)*/
     }
 }
