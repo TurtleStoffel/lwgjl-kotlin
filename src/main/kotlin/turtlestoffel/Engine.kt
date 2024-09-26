@@ -81,6 +81,16 @@ class Engine(
     private val camera = Camera()
     private val frameCounter = FrameCounter()
 
+    fun run() {
+        try {
+            init()
+            loop()
+            glfwDestroyWindow(window)
+        } finally {
+            glfwTerminate()
+        }
+    }
+
     private fun init() {
         // Set up an error callback. The default implementation
         // will print the error message in System.err.
@@ -193,15 +203,5 @@ class Engine(
         rightMesh.translationVector.set(3f, 0f, 0f)
 
         return listOf(leftMesh, rightMesh)
-    }
-
-    fun run() {
-        try {
-            init()
-            loop()
-            glfwDestroyWindow(window)
-        } finally {
-            glfwTerminate()
-        }
     }
 }
