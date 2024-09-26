@@ -8,19 +8,21 @@ internal fun createFloatBuffer(vertices: List<Vertex>): FloatBuffer {
     val buffer = BufferUtils.createFloatBuffer(vertices.size * VERTEX_FLOAT_COUNT)
 
     buffer.put(
-        vertices.map { listOf(
-            it.position.x,
-            it.position.y,
-            it.position.z,
-            it.normal.x,
-            it.normal.y,
-            it.normal.z,
-            it.color.x,
-            it.color.y,
-            it.color.z
-        ) }
-            .flatten()
-            .toFloatArray()
+        vertices
+            .map {
+                listOf(
+                    it.position.x,
+                    it.position.y,
+                    it.position.z,
+                    it.normal.x,
+                    it.normal.y,
+                    it.normal.z,
+                    it.color.x,
+                    it.color.y,
+                    it.color.z,
+                )
+            }.flatten()
+            .toFloatArray(),
     )
     // Put buffer into read-mode
     buffer.flip()

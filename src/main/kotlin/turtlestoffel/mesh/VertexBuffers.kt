@@ -1,12 +1,21 @@
 package turtlestoffel.mesh
 
-import org.lwjgl.opengl.GL15.*
+import org.lwjgl.opengl.GL11.GL_FLOAT
+import org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER
+import org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER
+import org.lwjgl.opengl.GL15.GL_STATIC_DRAW
+import org.lwjgl.opengl.GL15.glBindBuffer
+import org.lwjgl.opengl.GL15.glBufferData
+import org.lwjgl.opengl.GL15.glGenBuffers
 import org.lwjgl.opengl.GL20.glEnableVertexAttribArray
 import org.lwjgl.opengl.GL20.glVertexAttribPointer
 import org.lwjgl.opengl.GL30.glBindVertexArray
 import org.lwjgl.opengl.GL30.glGenVertexArrays
 
-fun generateVao(vertices: List<Vertex>, indices: List<Int>): Int {
+fun generateVao(
+    vertices: List<Vertex>,
+    indices: List<Int>,
+): Int {
     val vao = glGenVertexArrays()
     glBindVertexArray(vao)
     storeData(vertices)

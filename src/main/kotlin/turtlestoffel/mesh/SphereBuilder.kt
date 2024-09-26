@@ -6,7 +6,9 @@ import org.joml.Vector3i
 
 typealias Face = Vector3i
 
-class SphereBuilder(private val depth: Int = 1) {
+class SphereBuilder(
+    private val depth: Int = 1,
+) {
     private val vertices = mutableListOf<Vertex>()
 
     private val midpointCache = mutableMapOf<Long, Int>()
@@ -16,9 +18,11 @@ class SphereBuilder(private val depth: Int = 1) {
         val rawMesh = generate(depth)
 
         rawMesh.vertices.forEach {
-            it.position.add(Vector3f(
-                SimplexNoise.noise(it.position.x, it.position.y, it.position.z) / 5
-            ))
+            it.position.add(
+                Vector3f(
+                    SimplexNoise.noise(it.position.x, it.position.y, it.position.z) / 5,
+                ),
+            )
         }
 
         return Mesh.build(rawMesh)
@@ -31,26 +35,29 @@ class SphereBuilder(private val depth: Int = 1) {
         vertexIndex += vertices.size
 
         for (i in 1..depth) {
-            faces = faces.flatMap {
-                val a = getMidpoint(it.x, it.y)
-                val b = getMidpoint(it.y, it.z)
-                val c = getMidpoint(it.z, it.x)
+            faces =
+                faces.flatMap {
+                    val a = getMidpoint(it.x, it.y)
+                    val b = getMidpoint(it.y, it.z)
+                    val c = getMidpoint(it.z, it.x)
 
-                return@flatMap listOf(
-                    Face(it.x, a, c),
-                    Face(it.y, b, a),
-                    Face(it.z, c, b),
-                    Face(a,    b, c)
-                )
-            }
+                    return@flatMap listOf(
+                        Face(it.x, a, c),
+                        Face(it.y, b, a),
+                        Face(it.z, c, b),
+                        Face(a, b, c),
+                    )
+                }
         }
-
 
         val indices = faces.flatMap { listOf(it.x, it.y, it.z) }
         return RawMesh(vertices, indices)
     }
 
-    private fun getMidpoint(p1: Int, p2: Int): Int {
+    private fun getMidpoint(
+        p1: Int,
+        p2: Int,
+    ): Int {
         val key = calculateCacheKey(p1, p2)
 
         val cacheResult = midpointCache[key]
@@ -61,18 +68,20 @@ class SphereBuilder(private val depth: Int = 1) {
         val v1 = vertices[p1]
         val v2 = vertices[p2]
 
-        val position = Vector3f(
-            (v1.position.x + v2.position.x)/2.0f,
-            (v1.position.y + v2.position.y)/2.0f,
-            (v1.position.z + v2.position.z)/2.0f
-        ).normalize()
+        val position =
+            Vector3f(
+                (v1.position.x + v2.position.x) / 2.0f,
+                (v1.position.y + v2.position.y) / 2.0f,
+                (v1.position.z + v2.position.z) / 2.0f,
+            ).normalize()
 
-        val midpoint = Vertex(
-            position = position,
-            // Position and normal are the same for a sphere
-            normal = Vector3f(position),
-            color = Vector3f(1.0f, 0.0f, 0.0f)
-        )
+        val midpoint =
+            Vertex(
+                position = position,
+                // Position and normal are the same for a sphere
+                normal = Vector3f(position),
+                color = Vector3f(1.0f, 0.0f, 0.0f),
+            )
 
         vertices.add(midpoint)
 
@@ -84,7 +93,10 @@ class SphereBuilder(private val depth: Int = 1) {
         return currentVertexIndex
     }
 
-    private fun calculateCacheKey(p1: Int, p2: Int): Long {
+    private fun calculateCacheKey(
+        p1: Int,
+        p2: Int,
+    ): Long {
         val smallIndex: Int
         val bigIndex: Int
         if (p1 < p2) {

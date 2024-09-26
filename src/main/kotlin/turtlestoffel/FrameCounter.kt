@@ -8,7 +8,7 @@ class FrameCounter {
     fun update() {
         val timeDifference = glfwGetTime() - frameTime
         println("Time since last frame: $timeDifference")
-        println("FPS: ${1/timeDifference}")
+        println("FPS: ${1 / timeDifference}")
         frameTime = glfwGetTime()
     }
 }

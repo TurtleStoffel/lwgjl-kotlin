@@ -1,27 +1,31 @@
 package turtlestoffel.mesh
 
-import org.lwjgl.opengl.GL11.*
+import org.lwjgl.opengl.GL11.GL_LINES
+import org.lwjgl.opengl.GL11.GL_TRIANGLES
+import org.lwjgl.opengl.GL11.GL_UNSIGNED_INT
+import org.lwjgl.opengl.GL11.glDrawElements
 import org.lwjgl.opengl.GL20.glDisableVertexAttribArray
 import org.lwjgl.opengl.GL20.glEnableVertexAttribArray
 import org.lwjgl.opengl.GL30.glBindVertexArray
 
 data class RawMesh(
     val vertices: List<Vertex>,
-    val indices: List<Int>
+    val indices: List<Int>,
 )
 
 class Mesh private constructor(
     private val vao: Int,
     private val vertexCount: Int,
     private val normalVao: Int?,
-    private val normalVertexCount: Int?
+    private val normalVertexCount: Int?,
 ) {
     companion object {
-        fun build(rawMesh: RawMesh) : Mesh {
-            var denormalizedMesh = RawMesh(
-                vertices = rawMesh.indices.map { rawMesh.vertices[it] },
-                indices = rawMesh.indices.indices.toList()
-            )
+        fun build(rawMesh: RawMesh): Mesh {
+            var denormalizedMesh =
+                RawMesh(
+                    vertices = rawMesh.indices.map { rawMesh.vertices[it] },
+                    indices = rawMesh.indices.indices.toList(),
+                )
             denormalizedMesh = generateFlatShadingMesh(denormalizedMesh)
             val normalMesh = generateNormalMesh(denormalizedMesh)
 

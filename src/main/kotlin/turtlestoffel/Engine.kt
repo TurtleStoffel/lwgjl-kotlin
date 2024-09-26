@@ -1,11 +1,48 @@
 package turtlestoffel
 
 import org.lwjgl.BufferUtils
-import org.lwjgl.glfw.GLFW.*
+import org.lwjgl.glfw.GLFW.GLFW_CONTEXT_VERSION_MAJOR
+import org.lwjgl.glfw.GLFW.GLFW_CONTEXT_VERSION_MINOR
+import org.lwjgl.glfw.GLFW.GLFW_FALSE
+import org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE
+import org.lwjgl.glfw.GLFW.GLFW_RELEASE
+import org.lwjgl.glfw.GLFW.GLFW_RESIZABLE
+import org.lwjgl.glfw.GLFW.GLFW_TRUE
+import org.lwjgl.glfw.GLFW.GLFW_VISIBLE
+import org.lwjgl.glfw.GLFW.glfwCreateWindow
+import org.lwjgl.glfw.GLFW.glfwDefaultWindowHints
+import org.lwjgl.glfw.GLFW.glfwDestroyWindow
+import org.lwjgl.glfw.GLFW.glfwGetPrimaryMonitor
+import org.lwjgl.glfw.GLFW.glfwGetTime
+import org.lwjgl.glfw.GLFW.glfwGetVideoMode
+import org.lwjgl.glfw.GLFW.glfwInit
+import org.lwjgl.glfw.GLFW.glfwMakeContextCurrent
+import org.lwjgl.glfw.GLFW.glfwPollEvents
+import org.lwjgl.glfw.GLFW.glfwSetErrorCallback
+import org.lwjgl.glfw.GLFW.glfwSetKeyCallback
+import org.lwjgl.glfw.GLFW.glfwSetWindowPos
+import org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose
+import org.lwjgl.glfw.GLFW.glfwShowWindow
+import org.lwjgl.glfw.GLFW.glfwSwapBuffers
+import org.lwjgl.glfw.GLFW.glfwSwapInterval
+import org.lwjgl.glfw.GLFW.glfwTerminate
+import org.lwjgl.glfw.GLFW.glfwWindowHint
+import org.lwjgl.glfw.GLFW.glfwWindowShouldClose
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.glfw.GLFWKeyCallback
 import org.lwjgl.opengl.GL
-import org.lwjgl.opengl.GL20.*
+import org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT
+import org.lwjgl.opengl.GL11.GL_CULL_FACE
+import org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT
+import org.lwjgl.opengl.GL11.GL_DEPTH_TEST
+import org.lwjgl.opengl.GL11.GL_FRONT_AND_BACK
+import org.lwjgl.opengl.GL11.GL_POLYGON
+import org.lwjgl.opengl.GL11.glClear
+import org.lwjgl.opengl.GL11.glClearColor
+import org.lwjgl.opengl.GL11.glEnable
+import org.lwjgl.opengl.GL11.glPolygonMode
+import org.lwjgl.opengl.GL20.glGetUniformLocation
+import org.lwjgl.opengl.GL20.glUniformMatrix4fv
 import org.lwjgl.system.MemoryUtil.NULL
 import turtlestoffel.mesh.SphereBuilder
 
@@ -32,14 +69,14 @@ private fun createWindow(): Long {
 }
 
 class Engine(
-    private val window: Long = createWindow()
+    private val window: Long = createWindow(),
 ) {
     companion object {
         val WINDOW_SIZE = Pair(800, 600)
     }
 
-    private var errorCallback : GLFWErrorCallback? = null
-    private var keyCallback : GLFWKeyCallback? = null
+    private var errorCallback: GLFWErrorCallback? = null
+    private var keyCallback: GLFWKeyCallback? = null
 
     private val camera = Camera()
     private val frameCounter = FrameCounter()
@@ -50,20 +87,25 @@ class Engine(
         errorCallback = glfwSetErrorCallback(GLFWErrorCallback.createPrint(System.err))
 
         // Set up a key callback. It will be called every time a key is pressed, repeated or released.
-        keyCallback = glfwSetKeyCallback(window, object : GLFWKeyCallback() {
-            override fun invoke(window: Long,
-                                key: Int,
-                                scancode: Int,
-                                action: Int,
-                                mods: Int) {
+        keyCallback =
+            glfwSetKeyCallback(
+                window,
+                object : GLFWKeyCallback() {
+                    override fun invoke(
+                        window: Long,
+                        key: Int,
+                        scancode: Int,
+                        action: Int,
+                        mods: Int,
+                    ) {
+                        if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
+                            glfwSetWindowShouldClose(window, true)
+                        }
 
-                if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE ) {
-                    glfwSetWindowShouldClose(window, true)
-                }
-
-                camera.handleKeyInput(key, action)
-            }
-        })
+                        camera.handleKeyInput(key, action)
+                    }
+                },
+            )
 
         // Get the resolution of the primary monitor
         val videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor())!!
@@ -72,7 +114,7 @@ class Engine(
         glfwSetWindowPos(
             window,
             (videoMode.width() - WINDOW_SIZE.first) / 2,
-            (videoMode.height() - WINDOW_SIZE.second) / 2
+            (videoMode.height() - WINDOW_SIZE.second) / 2,
         )
 
         // Make the OpenGL context current
@@ -95,8 +137,8 @@ class Engine(
         // Set the clear color
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f)
 
-        //val mesh = SphereBuilder().build()
-        //val mesh = RoofBuilder().build()
+        // val mesh = SphereBuilder().build()
+        // val mesh = RoofBuilder().build()
 
         val leftMesh = GameObject(SphereBuilder().build())
         leftMesh.translationVector.set(-3f, 0f, 0f)
