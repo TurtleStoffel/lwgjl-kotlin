@@ -34,4 +34,11 @@ class Scene {
     ) {
         camera.handleKeyInput(key, action)
     }
+
+    fun handleMouseInput(
+        positionX: Double,
+        positionY: Double,
+    ) {
+        println("Mouse position: ($positionX, $positionY)")
+    }
 }

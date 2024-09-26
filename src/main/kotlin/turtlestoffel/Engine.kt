@@ -5,6 +5,7 @@ import org.lwjgl.glfw.GLFW.GLFW_CONTEXT_VERSION_MAJOR
 import org.lwjgl.glfw.GLFW.GLFW_CONTEXT_VERSION_MINOR
 import org.lwjgl.glfw.GLFW.GLFW_FALSE
 import org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE
+import org.lwjgl.glfw.GLFW.GLFW_PRESS
 import org.lwjgl.glfw.GLFW.GLFW_RELEASE
 import org.lwjgl.glfw.GLFW.GLFW_RESIZABLE
 import org.lwjgl.glfw.GLFW.GLFW_TRUE
@@ -122,14 +123,17 @@ class Engine(
                     action: Int,
                     mods: Int,
                 ) {
-                    println("Mouse button: $button, action: $action")
+                    if (action != GLFW_PRESS) {
+                        return
+                    }
 
-                    val posX = BufferUtils.createDoubleBuffer(1)
-                    val posY = BufferUtils.createDoubleBuffer(1)
+                    println("Mouse button pressed: $button, action: $action")
+                    val positionX = BufferUtils.createDoubleBuffer(1)
+                    val positionY = BufferUtils.createDoubleBuffer(1)
 
-                    glfwGetCursorPos(window, posX, posY)
+                    glfwGetCursorPos(window, positionX, positionY)
 
-                    println("Mouse position: (${posX[0]}, ${posY[0]})")
+                    scene.handleMouseInput(positionX[0], positionY[0])
                 }
             },
         )
