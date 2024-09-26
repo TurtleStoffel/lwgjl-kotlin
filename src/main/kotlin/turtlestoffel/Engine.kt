@@ -1,6 +1,5 @@
 package turtlestoffel
 
-import org.lwjgl.BufferUtils
 import org.lwjgl.glfw.GLFW.GLFW_CONTEXT_VERSION_MAJOR
 import org.lwjgl.glfw.GLFW.GLFW_CONTEXT_VERSION_MINOR
 import org.lwjgl.glfw.GLFW.GLFW_FALSE
@@ -41,10 +40,7 @@ import org.lwjgl.opengl.GL11.glClear
 import org.lwjgl.opengl.GL11.glClearColor
 import org.lwjgl.opengl.GL11.glEnable
 import org.lwjgl.opengl.GL11.glPolygonMode
-import org.lwjgl.opengl.GL20.glGetUniformLocation
-import org.lwjgl.opengl.GL20.glUniformMatrix4fv
 import org.lwjgl.system.MemoryUtil.NULL
-import turtlestoffel.mesh.SphereBuilder
 
 private fun createWindow(): Long {
     // Initialize GLFW. Most GLFW functions will not work before doing this.
@@ -78,7 +74,7 @@ class Engine(
     private var errorCallback: GLFWErrorCallback? = null
     private var keyCallback: GLFWKeyCallback? = null
 
-    private val camera = Camera()
+    private lateinit var scene: Scene
     private val frameCounter = FrameCounter()
 
     fun run() {
@@ -112,7 +108,7 @@ class Engine(
                             glfwSetWindowShouldClose(window, true)
                         }
 
-                        camera.handleKeyInput(key, action)
+                        scene.handleKeyInput(key, action)
                     }
                 },
             )
@@ -132,11 +128,6 @@ class Engine(
         // Enable v-sync
         glfwSwapInterval(1)
 
-        // Make the window visible
-        glfwShowWindow(window)
-    }
-
-    private fun loop() {
         // This line is critical for LWJGL's interoperation with GLFW's
         // OpenGL context, or any context that is managed externally.
         // LWJGL detects the context that is current in the current thread,
@@ -144,12 +135,16 @@ class Engine(
         // bindings available for use.
         GL.createCapabilities()
 
+        // Must be created after the OpenGL context is created because it generates Shaders on initialization
+        scene = Scene()
+
+        // Make the window visible
+        glfwShowWindow(window)
+    }
+
+    private fun loop() {
         // Set the clear color
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f)
-
-        val objects = createScene()
-
-        val shader = Shader.createShader()
 
         glEnable(GL_CULL_FACE)
         glPolygonMode(GL_FRONT_AND_BACK, GL_POLYGON)
@@ -165,20 +160,7 @@ class Engine(
 
             // --- Animation
             val time = glfwGetTime()
-            camera.update()
-            objects.forEach { it.update(time) }
-
-            val viewProjectionMatrix = camera.getViewProjectionMatrix()
-            val mvpLocation = glGetUniformLocation(shader, "viewProjectionMatrix")
-            glUniformMatrix4fv(mvpLocation, false, viewProjectionMatrix)
-
-            // --- Render
-            val modelMatrixLocation = glGetUniformLocation(shader, "modelMatrix")
-
-            objects.forEach {
-                glUniformMatrix4fv(modelMatrixLocation, false, it.modelMatrix.get(BufferUtils.createFloatBuffer(16)))
-                it.mesh.render()
-            }
+            scene.render(time)
 
             // --- Frame finalization
             frameCounter.update()
@@ -190,18 +172,5 @@ class Engine(
             // invoked during this call.
             glfwPollEvents()
         }
-    }
-
-    private fun createScene(): List<GameObject> {
-        // val mesh = SphereBuilder().build()
-        // val mesh = RoofBuilder().build()
-
-        val leftMesh = GameObject(SphereBuilder().build())
-        leftMesh.translationVector.set(-3f, 0f, 0f)
-
-        val rightMesh = GameObject(SphereBuilder().build())
-        rightMesh.translationVector.set(3f, 0f, 0f)
-
-        return listOf(leftMesh, rightMesh)
     }
 }
