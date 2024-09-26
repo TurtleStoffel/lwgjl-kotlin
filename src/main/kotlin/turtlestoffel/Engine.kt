@@ -1,5 +1,6 @@
 package turtlestoffel
 
+import org.lwjgl.BufferUtils
 import org.lwjgl.glfw.GLFW.GLFW_CONTEXT_VERSION_MAJOR
 import org.lwjgl.glfw.GLFW.GLFW_CONTEXT_VERSION_MINOR
 import org.lwjgl.glfw.GLFW.GLFW_FALSE
@@ -11,6 +12,7 @@ import org.lwjgl.glfw.GLFW.GLFW_VISIBLE
 import org.lwjgl.glfw.GLFW.glfwCreateWindow
 import org.lwjgl.glfw.GLFW.glfwDefaultWindowHints
 import org.lwjgl.glfw.GLFW.glfwDestroyWindow
+import org.lwjgl.glfw.GLFW.glfwGetCursorPos
 import org.lwjgl.glfw.GLFW.glfwGetPrimaryMonitor
 import org.lwjgl.glfw.GLFW.glfwGetTime
 import org.lwjgl.glfw.GLFW.glfwGetVideoMode
@@ -19,6 +21,7 @@ import org.lwjgl.glfw.GLFW.glfwMakeContextCurrent
 import org.lwjgl.glfw.GLFW.glfwPollEvents
 import org.lwjgl.glfw.GLFW.glfwSetErrorCallback
 import org.lwjgl.glfw.GLFW.glfwSetKeyCallback
+import org.lwjgl.glfw.GLFW.glfwSetMouseButtonCallback
 import org.lwjgl.glfw.GLFW.glfwSetWindowPos
 import org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose
 import org.lwjgl.glfw.GLFW.glfwShowWindow
@@ -29,6 +32,7 @@ import org.lwjgl.glfw.GLFW.glfwWindowHint
 import org.lwjgl.glfw.GLFW.glfwWindowShouldClose
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.glfw.GLFWKeyCallback
+import org.lwjgl.glfw.GLFWMouseButtonCallback
 import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT
 import org.lwjgl.opengl.GL11.GL_CULL_FACE
@@ -72,7 +76,7 @@ class Engine(
     }
 
     private lateinit var scene: Scene
-    private val frameCounter = FrameCounter()
+    // private val frameCounter = FrameCounter()
 
     fun run() {
         try {
@@ -105,6 +109,27 @@ class Engine(
                     }
 
                     scene.handleKeyInput(key, action)
+                }
+            },
+        )
+
+        glfwSetMouseButtonCallback(
+            window,
+            object : GLFWMouseButtonCallback() {
+                override fun invoke(
+                    window: Long,
+                    button: Int,
+                    action: Int,
+                    mods: Int,
+                ) {
+                    println("Mouse button: $button, action: $action")
+
+                    val posX = BufferUtils.createDoubleBuffer(1)
+                    val posY = BufferUtils.createDoubleBuffer(1)
+
+                    glfwGetCursorPos(window, posX, posY)
+
+                    println("Mouse position: (${posX[0]}, ${posY[0]})")
                 }
             },
         )
@@ -159,7 +184,7 @@ class Engine(
             scene.render(time)
 
             // --- Frame finalization
-            frameCounter.update()
+            // frameCounter.update()
 
             // Swap the color buffers
             glfwSwapBuffers(window)
