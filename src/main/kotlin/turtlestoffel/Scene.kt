@@ -3,7 +3,7 @@ package turtlestoffel
 import org.lwjgl.BufferUtils
 import org.lwjgl.opengl.GL20.glGetUniformLocation
 import org.lwjgl.opengl.GL20.glUniformMatrix4fv
-import turtlestoffel.mesh.SphereBuilder
+import turtlestoffel.mesh.PlaneBuilder
 
 class Scene {
     private val camera = Camera()
@@ -14,14 +14,15 @@ class Scene {
         // val mesh = SphereBuilder().build()
         // val mesh = RoofBuilder().build()
 
+        /*
         val leftMesh = GameObject(SphereBuilder().build())
         leftMesh.translationVector.set(-3f, 0f, 0f)
 
         val rightMesh = GameObject(SphereBuilder().build())
         rightMesh.translationVector.set(3f, 0f, 0f)
-
         objects = listOf(leftMesh, rightMesh)
-
+         */
+        objects = listOf(GameObject(PlaneBuilder().build()))
         shader = Shader.createShader()
     }
 
