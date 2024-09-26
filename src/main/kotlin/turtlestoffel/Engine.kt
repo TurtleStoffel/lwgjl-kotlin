@@ -71,9 +71,6 @@ class Engine(
         val WINDOW_SIZE = Pair(800, 600)
     }
 
-    private var errorCallback: GLFWErrorCallback? = null
-    private var keyCallback: GLFWKeyCallback? = null
-
     private lateinit var scene: Scene
     private val frameCounter = FrameCounter()
 
@@ -90,28 +87,27 @@ class Engine(
     private fun init() {
         // Set up an error callback. The default implementation
         // will print the error message in System.err.
-        errorCallback = glfwSetErrorCallback(GLFWErrorCallback.createPrint(System.err))
+        glfwSetErrorCallback(GLFWErrorCallback.createPrint(System.err))
 
         // Set up a key callback. It will be called every time a key is pressed, repeated or released.
-        keyCallback =
-            glfwSetKeyCallback(
-                window,
-                object : GLFWKeyCallback() {
-                    override fun invoke(
-                        window: Long,
-                        key: Int,
-                        scancode: Int,
-                        action: Int,
-                        mods: Int,
-                    ) {
-                        if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
-                            glfwSetWindowShouldClose(window, true)
-                        }
-
-                        scene.handleKeyInput(key, action)
+        glfwSetKeyCallback(
+            window,
+            object : GLFWKeyCallback() {
+                override fun invoke(
+                    window: Long,
+                    key: Int,
+                    scancode: Int,
+                    action: Int,
+                    mods: Int,
+                ) {
+                    if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
+                        glfwSetWindowShouldClose(window, true)
                     }
-                },
-            )
+
+                    scene.handleKeyInput(key, action)
+                }
+            },
+        )
 
         // Get the resolution of the primary monitor
         val videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor())!!
