@@ -137,14 +137,7 @@ class Engine(
         // Set the clear color
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f)
 
-        // val mesh = SphereBuilder().build()
-        // val mesh = RoofBuilder().build()
-
-        val leftMesh = GameObject(SphereBuilder().build())
-        leftMesh.translationVector.set(-3f, 0f, 0f)
-
-        val rightMesh = GameObject(SphereBuilder().build())
-        rightMesh.translationVector.set(3f, 0f, 0f)
+        val objects = createScene()
 
         val shader = Shader.createShader()
 
@@ -163,8 +156,7 @@ class Engine(
             // --- Animation
             val time = glfwGetTime()
             camera.update()
-            leftMesh.update(time)
-            rightMesh.update(time)
+            objects.forEach { it.update(time) }
 
             val viewProjectionMatrix = camera.getViewProjectionMatrix()
             val mvpLocation = glGetUniformLocation(shader, "viewProjectionMatrix")
@@ -173,11 +165,10 @@ class Engine(
             // --- Render
             val modelMatrixLocation = glGetUniformLocation(shader, "modelMatrix")
 
-            glUniformMatrix4fv(modelMatrixLocation, false, leftMesh.modelMatrix.get(BufferUtils.createFloatBuffer(16)))
-            leftMesh.mesh.render()
-
-            glUniformMatrix4fv(modelMatrixLocation, false, rightMesh.modelMatrix.get(BufferUtils.createFloatBuffer(16)))
-            rightMesh.mesh.render()
+            objects.forEach {
+                glUniformMatrix4fv(modelMatrixLocation, false, it.modelMatrix.get(BufferUtils.createFloatBuffer(16)))
+                it.mesh.render()
+            }
 
             // --- Frame finalization
             frameCounter.update()
@@ -189,6 +180,19 @@ class Engine(
             // invoked during this call.
             glfwPollEvents()
         }
+    }
+
+    private fun createScene(): List<GameObject> {
+        // val mesh = SphereBuilder().build()
+        // val mesh = RoofBuilder().build()
+
+        val leftMesh = GameObject(SphereBuilder().build())
+        leftMesh.translationVector.set(-3f, 0f, 0f)
+
+        val rightMesh = GameObject(SphereBuilder().build())
+        rightMesh.translationVector.set(3f, 0f, 0f)
+
+        return listOf(leftMesh, rightMesh)
     }
 
     fun run() {
