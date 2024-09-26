@@ -7,24 +7,8 @@ import turtlestoffel.mesh.PlaneBuilder
 
 class Scene {
     private val camera = Camera()
-    private val objects: List<GameObject>
-    private val shader: Int
-
-    init {
-        // val mesh = SphereBuilder().build()
-        // val mesh = RoofBuilder().build()
-
-        /*
-        val leftMesh = GameObject(SphereBuilder().build())
-        leftMesh.translationVector.set(-3f, 0f, 0f)
-
-        val rightMesh = GameObject(SphereBuilder().build())
-        rightMesh.translationVector.set(3f, 0f, 0f)
-        objects = listOf(leftMesh, rightMesh)
-         */
-        objects = listOf(GameObject(PlaneBuilder().build()))
-        shader = Shader.createShader()
-    }
+    private val objects: List<GameObject> = listOf(GameObject(PlaneBuilder().build()))
+    private val shader: Int = Shader.createShader()
 
     fun render(time: Double) {
         camera.update()
