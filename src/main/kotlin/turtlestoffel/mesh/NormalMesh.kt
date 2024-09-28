@@ -11,7 +11,7 @@ class NormalMesh(
     private val mesh: IMesh,
     private val normalVao: Int,
     private val normalVertexCount: Int,
-) : IMesh by mesh {
+) : IMesh {
     companion object {
         fun build(
             mesh: IMesh,
