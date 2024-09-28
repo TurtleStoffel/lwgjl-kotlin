@@ -5,7 +5,7 @@ import turtlestoffel.randomColor
 
 class PlaneBuilder {
     companion object {
-        fun build(): Mesh {
+        fun build(): IMesh {
             val originalVertex =
                 Vertex(
                     position = Vector3f(-1.0f, -1.0f, 0.0f),
@@ -44,7 +44,8 @@ class PlaneBuilder {
                     indices,
                 )
 
-            return Mesh.build(rawMesh)
+            val mesh = Mesh.build(rawMesh)
+            return NormalMesh.build(mesh, rawMesh)
         }
     }
 }

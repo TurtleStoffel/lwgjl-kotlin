@@ -2,11 +2,11 @@ package turtlestoffel
 
 import org.joml.Matrix4f
 import org.joml.Vector3f
-import turtlestoffel.mesh.Mesh
+import turtlestoffel.mesh.IMesh
 import kotlin.math.sin
 
 class GameObject(
-    val mesh: Mesh,
+    val mesh: IMesh,
 ) {
     val modelMatrix = Matrix4f()
     val translationVector = Vector3f()
