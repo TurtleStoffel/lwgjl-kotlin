@@ -9,7 +9,8 @@ import org.lwjgl.glfw.GLFW.GLFW_KEY_S
 import org.lwjgl.glfw.GLFW.GLFW_KEY_W
 import org.lwjgl.glfw.GLFW.GLFW_PRESS
 import org.lwjgl.glfw.GLFW.GLFW_RELEASE
-import java.nio.FloatBuffer
+import org.lwjgl.opengl.GL20.glGetUniformLocation
+import org.lwjgl.opengl.GL20.glUniformMatrix4fv
 import kotlin.math.PI
 
 const val CAMERA_SPEED = 0.1f
@@ -57,10 +58,19 @@ class Camera {
         position.add(direction)
     }
 
-    fun getViewProjectionMatrix(): FloatBuffer {
+    fun setViewProjectionMatrix(shader: Int) {
         val cameraBuffer = BufferUtils.createFloatBuffer(16)
+        val viewProjectionMatrix =
+            getViewProjectionMatrix()
+                .get(cameraBuffer)
+
+        val mvpLocation = glGetUniformLocation(shader, "viewProjectionMatrix")
+        glUniformMatrix4fv(mvpLocation, false, viewProjectionMatrix)
+    }
+
+    private fun getViewProjectionMatrix(): Matrix4f {
         val center = Vector3f(position).add(centerOffset)
-        Matrix4f()
+        return Matrix4f()
             .perspective((PI / 2).toFloat(), Engine.WINDOW_SIZE.first.toFloat() / Engine.WINDOW_SIZE.second, 0.01f, 100.0f)
             .lookAt(
                 position.x,
@@ -72,8 +82,6 @@ class Camera {
                 0.0f,
                 0.0f,
                 1.0f,
-            ).get(cameraBuffer)
-
-        return cameraBuffer
+            )
     }
 }

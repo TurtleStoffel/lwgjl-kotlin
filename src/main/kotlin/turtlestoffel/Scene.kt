@@ -15,9 +15,7 @@ class Scene {
 
         objects.forEach { it.update(time) }
 
-        val viewProjectionMatrix = camera.getViewProjectionMatrix()
-        val mvpLocation = glGetUniformLocation(shader, "viewProjectionMatrix")
-        glUniformMatrix4fv(mvpLocation, false, viewProjectionMatrix)
+        camera.setViewProjectionMatrix(shader)
 
         // --- Render
         val modelMatrixLocation = glGetUniformLocation(shader, "modelMatrix")
