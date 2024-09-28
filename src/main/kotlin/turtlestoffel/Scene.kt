@@ -4,11 +4,16 @@ import org.joml.Vector3f
 import org.lwjgl.BufferUtils
 import org.lwjgl.opengl.GL20.glGetUniformLocation
 import org.lwjgl.opengl.GL20.glUniformMatrix4fv
+import turtlestoffel.mesh.Line
 import turtlestoffel.mesh.PlaneBuilder
 
 class Scene {
     private val camera = Camera()
-    private val objects: List<GameObject> = listOf(GameObject(PlaneBuilder.build()))
+    private val objects: List<GameObject> =
+        listOf(
+            GameObject(PlaneBuilder.build()),
+            GameObject(Line.build(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(1.0f, 1.0f, 1.0f))),
+        )
     private val shader: Int = Shader.createShader()
 
     fun render(time: Double) {
