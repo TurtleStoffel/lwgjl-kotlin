@@ -68,7 +68,7 @@ class Camera {
         glUniformMatrix4fv(mvpLocation, false, viewProjectionMatrix)
     }
 
-    private fun getViewProjectionMatrix(): Matrix4f {
+    fun getViewProjectionMatrix(): Matrix4f {
         val center = Vector3f(position).add(centerOffset)
         return Matrix4f()
             .perspective((PI / 2).toFloat(), Engine.WINDOW_SIZE.first.toFloat() / Engine.WINDOW_SIZE.second, 0.01f, 100.0f)
