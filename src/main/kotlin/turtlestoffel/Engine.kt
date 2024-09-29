@@ -76,7 +76,7 @@ class Engine(
         val WINDOW_SIZE = Pair(800, 600)
     }
 
-    private lateinit var scene: Scene
+    private val scene = Scene()
     // private val frameCounter = FrameCounter()
 
     fun run() {
@@ -160,8 +160,8 @@ class Engine(
         // bindings available for use.
         GL.createCapabilities()
 
-        // Must be created after the OpenGL context is created because it generates Shaders on initialization
-        scene = Scene()
+        // Scene must be initialised after the OpenGL context is created because it generates Shaders
+        scene.init()
 
         // Make the window visible
         glfwShowWindow(window)

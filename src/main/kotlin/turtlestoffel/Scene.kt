@@ -6,15 +6,25 @@ import org.lwjgl.opengl.GL20.glGetUniformLocation
 import org.lwjgl.opengl.GL20.glUniformMatrix4fv
 import turtlestoffel.mesh.Line
 import turtlestoffel.mesh.PlaneBuilder
+import kotlin.properties.Delegates
 
 class Scene {
     private val camera = Camera()
-    private val objects =
-        mutableListOf(
-            GameObject(PlaneBuilder.build()),
-            GameObject(Line.build(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(1.0f, 1.0f, 1.0f))),
+    private val objects = mutableListOf<GameObject>()
+    private var shader by Delegates.notNull<Int>()
+
+    /**
+     * Generate the shader program
+     */
+    fun init() {
+        shader = Shader.createShader()
+        objects.addAll(
+            listOf(
+                GameObject(PlaneBuilder.build()),
+                GameObject(Line.build(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(1.0f, 1.0f, 1.0f))),
+            ),
         )
-    private val shader: Int = Shader.createShader()
+    }
 
     fun render(time: Double) {
         camera.update()
