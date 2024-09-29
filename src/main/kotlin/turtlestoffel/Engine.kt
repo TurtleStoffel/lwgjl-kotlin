@@ -19,7 +19,6 @@ import org.lwjgl.glfw.GLFW.glfwMakeContextCurrent
 import org.lwjgl.glfw.GLFW.glfwPollEvents
 import org.lwjgl.glfw.GLFW.glfwSetErrorCallback
 import org.lwjgl.glfw.GLFW.glfwSetKeyCallback
-import org.lwjgl.glfw.GLFW.glfwSetMouseButtonCallback
 import org.lwjgl.glfw.GLFW.glfwSetWindowPos
 import org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose
 import org.lwjgl.glfw.GLFW.glfwShowWindow
@@ -73,6 +72,7 @@ class Engine(
     }
 
     private val scene = Scene()
+    private val mouseHandler = MouseHandler(window, scene)
     // private val frameCounter = FrameCounter()
 
     fun run() {
@@ -109,8 +109,6 @@ class Engine(
                 }
             },
         )
-
-        glfwSetMouseButtonCallback(window, MouseHandler(scene))
 
         // Get the resolution of the primary monitor
         val videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor())!!
