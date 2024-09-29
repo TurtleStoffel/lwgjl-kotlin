@@ -18,8 +18,8 @@ class Line private constructor(
         ): Line {
             val vertices =
                 listOf(
-                    Vertex(start, Vector3f(1.0f, 0.0f, 0.0f)),
-                    Vertex(end, Vector3f(1.0f, 0.0f, 0.0f)),
+                    Vertex(start, Vector3f(1.0f, 0.0f, 0.0f), Vector3f(1.0f, 0.0f, 0.0f)),
+                    Vertex(end, Vector3f(1.0f, 0.0f, 0.0f), Vector3f(1.0f, 0.0f, 0.0f)),
                 )
             val indices = listOf(0, 1)
             val vao = generateVao(vertices, indices)
