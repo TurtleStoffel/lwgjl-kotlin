@@ -95,16 +95,6 @@ class Camera {
 
         return Matrix4f()
             .perspective((PI / 2).toFloat(), Engine.WINDOW_SIZE.first.toFloat() / Engine.WINDOW_SIZE.second, 0.01f, 100.0f)
-            .lookAt(
-                position.x,
-                position.y,
-                position.z,
-                center.x,
-                center.y,
-                center.z,
-                up.x,
-                up.y,
-                up.z,
-            )
+            .lookAt(position, center, up)
     }
 }
