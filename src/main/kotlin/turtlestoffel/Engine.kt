@@ -1,11 +1,9 @@
 package turtlestoffel
 
-import org.lwjgl.BufferUtils
 import org.lwjgl.glfw.GLFW.GLFW_CONTEXT_VERSION_MAJOR
 import org.lwjgl.glfw.GLFW.GLFW_CONTEXT_VERSION_MINOR
 import org.lwjgl.glfw.GLFW.GLFW_FALSE
 import org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE
-import org.lwjgl.glfw.GLFW.GLFW_PRESS
 import org.lwjgl.glfw.GLFW.GLFW_RELEASE
 import org.lwjgl.glfw.GLFW.GLFW_RESIZABLE
 import org.lwjgl.glfw.GLFW.GLFW_TRUE
@@ -13,7 +11,6 @@ import org.lwjgl.glfw.GLFW.GLFW_VISIBLE
 import org.lwjgl.glfw.GLFW.glfwCreateWindow
 import org.lwjgl.glfw.GLFW.glfwDefaultWindowHints
 import org.lwjgl.glfw.GLFW.glfwDestroyWindow
-import org.lwjgl.glfw.GLFW.glfwGetCursorPos
 import org.lwjgl.glfw.GLFW.glfwGetPrimaryMonitor
 import org.lwjgl.glfw.GLFW.glfwGetTime
 import org.lwjgl.glfw.GLFW.glfwGetVideoMode
@@ -33,7 +30,6 @@ import org.lwjgl.glfw.GLFW.glfwWindowHint
 import org.lwjgl.glfw.GLFW.glfwWindowShouldClose
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.glfw.GLFWKeyCallback
-import org.lwjgl.glfw.GLFWMouseButtonCallback
 import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT
 import org.lwjgl.opengl.GL11.GL_CULL_FACE
@@ -114,29 +110,7 @@ class Engine(
             },
         )
 
-        glfwSetMouseButtonCallback(
-            window,
-            object : GLFWMouseButtonCallback() {
-                override fun invoke(
-                    window: Long,
-                    button: Int,
-                    action: Int,
-                    mods: Int,
-                ) {
-                    if (action != GLFW_PRESS) {
-                        return
-                    }
-
-                    println("Mouse button pressed: $button, action: $action")
-                    val positionX = BufferUtils.createDoubleBuffer(1)
-                    val positionY = BufferUtils.createDoubleBuffer(1)
-
-                    glfwGetCursorPos(window, positionX, positionY)
-
-                    scene.handleMouseInput(positionX[0], positionY[0])
-                }
-            },
-        )
+        glfwSetMouseButtonCallback(window, MouseHandler(scene))
 
         // Get the resolution of the primary monitor
         val videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor())!!
