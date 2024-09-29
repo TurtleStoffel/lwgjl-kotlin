@@ -72,7 +72,7 @@ class Engine(
     }
 
     private val scene = Scene()
-    private val mouseHandler = MouseHandler(window, scene)
+    private val mouseHandler = MouseHandler(window, scene::handleMouseInput, scene::handleRightMouseDrag)
     // private val frameCounter = FrameCounter()
 
     fun run() {

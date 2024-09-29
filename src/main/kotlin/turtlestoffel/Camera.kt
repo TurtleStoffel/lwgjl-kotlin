@@ -12,12 +12,16 @@ import org.lwjgl.glfw.GLFW.GLFW_RELEASE
 import org.lwjgl.opengl.GL20.glGetUniformLocation
 import org.lwjgl.opengl.GL20.glUniformMatrix4fv
 import kotlin.math.PI
+import kotlin.math.cos
+import kotlin.math.sin
 
 const val CAMERA_SPEED = 0.1f
 
 class Camera {
     private val position = Vector3f(0.0f, -5.0f, 3.0f)
-    private val centerOffset = Vector3f(0.0f, 5.0f, -3.0f)
+    private val viewDirection = Vector3f(1.0f, 5.0f, -3.0f).normalize()
+    private var horizontalAngle = 0.0f
+    private var verticalAngle = 0.0f
 
     private val direction = Vector3f(0.0f, 0.0f, 0.0f)
 
@@ -54,6 +58,22 @@ class Camera {
         }
     }
 
+    fun handleRightMouseDrag(
+        x: Double,
+        y: Double,
+    ) {
+        horizontalAngle += CAMERA_SPEED * (Engine.WINDOW_SIZE.first / 2 - x).toFloat()
+        verticalAngle += CAMERA_SPEED * (Engine.WINDOW_SIZE.second / 2 - y).toFloat()
+
+        viewDirection.set(
+            Vector3f(
+                cos(verticalAngle) * sin(horizontalAngle),
+                sin(verticalAngle),
+                cos(verticalAngle) * cos(horizontalAngle),
+            ),
+        )
+    }
+
     fun update() {
         position.add(direction)
     }
@@ -69,7 +89,10 @@ class Camera {
     }
 
     fun getViewProjectionMatrix(): Matrix4f {
-        val center = Vector3f(position).add(centerOffset)
+        val center = Vector3f(position).add(viewDirection)
+        val up = Vector3f()
+        position.cross(viewDirection, up)
+
         return Matrix4f()
             .perspective((PI / 2).toFloat(), Engine.WINDOW_SIZE.first.toFloat() / Engine.WINDOW_SIZE.second, 0.01f, 100.0f)
             .lookAt(
@@ -79,9 +102,9 @@ class Camera {
                 center.x,
                 center.y,
                 center.z,
-                0.0f,
-                0.0f,
-                1.0f,
+                up.x,
+                up.y,
+                up.z,
             )
     }
 }

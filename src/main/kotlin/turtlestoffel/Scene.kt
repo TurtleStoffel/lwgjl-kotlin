@@ -81,4 +81,12 @@ class Scene {
         objects.add(GameObject(Line.build(origin, endOpposite)))
         objects.add(GameObject(Line.build(Vector3f(0.0f, 0.0f, 0.0f), origin)))
     }
+
+    fun handleRightMouseDrag(
+        positionX: Double,
+        positionY: Double,
+    ) {
+        println("Right mouse drag: ($positionX, $positionY)")
+        camera.handleRightMouseDrag(positionX, positionY)
+    }
 }

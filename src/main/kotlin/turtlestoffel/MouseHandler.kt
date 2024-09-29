@@ -5,16 +5,20 @@ import org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_RIGHT
 import org.lwjgl.glfw.GLFW.GLFW_PRESS
 import org.lwjgl.glfw.GLFW.GLFW_RELEASE
 import org.lwjgl.glfw.GLFW.glfwGetCursorPos
+import org.lwjgl.glfw.GLFW.glfwSetCursorPos
 import org.lwjgl.glfw.GLFW.glfwSetCursorPosCallback
 import org.lwjgl.glfw.GLFW.glfwSetMouseButtonCallback
 
 class MouseHandler(
-    window: Long,
-    private val scene: Scene,
+    private val window: Long,
+    private val mouseClickHandler: (Double, Double) -> Unit,
+    private val rightMouseDragHandler: (Double, Double) -> Unit,
 ) {
+    private var rightMouseClicked = false
+
     init {
         glfwSetMouseButtonCallback(window) { _, button, action, _ ->
-            handleMouseButton(window, button, action)
+            handleMouseButton(button, action)
         }
         glfwSetCursorPosCallback(window) { _, xPos, yPos ->
             handleMousePosition(xPos, yPos)
@@ -22,7 +26,6 @@ class MouseHandler(
     }
 
     private fun handleMouseButton(
-        window: Long,
         button: Int,
         action: Int,
     ) {
@@ -30,10 +33,13 @@ class MouseHandler(
             // Set the cursor to the center of the screen
             // Start calculating angle for camera movement
             println("Right mouse button pressed")
+            rightMouseClicked = true
         } else if (action == GLFW_RELEASE && button == GLFW_MOUSE_BUTTON_RIGHT) {
             // Stop calculating angle for camera movement
             println("Right mouse button released")
+            rightMouseClicked = false
         }
+
         if (action != GLFW_PRESS) {
             return
         }
@@ -44,7 +50,7 @@ class MouseHandler(
 
         glfwGetCursorPos(window, positionX, positionY)
 
-        scene.handleMouseInput(positionX[0], positionY[0])
+        mouseClickHandler(positionX[0], positionY[0])
     }
 
     private fun handleMousePosition(
@@ -52,5 +58,14 @@ class MouseHandler(
         yPos: Double,
     ) {
         println("Mouse moved: x = $xPos, y = $yPos")
+        if (rightMouseClicked) {
+            rightMouseDragHandler(xPos, yPos)
+
+            glfwSetCursorPos(
+                window,
+                Engine.WINDOW_SIZE.first / 2.0,
+                Engine.WINDOW_SIZE.second / 2.0,
+            )
+        }
     }
 }
