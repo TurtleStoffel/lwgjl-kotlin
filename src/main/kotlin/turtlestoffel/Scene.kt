@@ -9,8 +9,8 @@ import turtlestoffel.mesh.PlaneBuilder
 
 class Scene {
     private val camera = Camera()
-    private val objects: List<GameObject> =
-        listOf(
+    private val objects =
+        mutableListOf(
             GameObject(PlaneBuilder.build()),
             GameObject(Line.build(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(1.0f, 1.0f, 1.0f))),
         )
@@ -51,26 +51,24 @@ class Scene {
         viewport[2] = Engine.WINDOW_SIZE.first
         viewport[3] = Engine.WINDOW_SIZE.second
 
-        val nearPosition = Vector3f()
+        val origin = Vector3f()
+        val direction = Vector3f()
 
-        camera.getViewProjectionMatrix().unproject(
+        camera.getViewProjectionMatrix().unprojectRay(
             positionX.toFloat(),
             invertedY.toFloat(),
-            0.0f,
             viewport,
-            nearPosition,
+            origin,
+            direction,
         )
-        println("Near position: (${nearPosition.x()}, ${nearPosition.y()}, ${nearPosition.z()})")
+        println("Origin: (${origin.x()}, ${origin.y()}, ${origin.z()})")
+        println("Direction: (${direction.x()}, ${direction.y()}, ${direction.z()})")
+        val end = origin.add(direction.mul(10000.0f))
+        println("End: (${end.x()}, ${end.y()}, ${end.z()})")
+        val endOpposite = origin.add(direction.mul(-1000.0f))
 
-        val farPosition = Vector3f()
-
-        camera.getViewProjectionMatrix().unproject(
-            positionX.toFloat(),
-            invertedY.toFloat(),
-            1.0f,
-            viewport,
-            farPosition,
-        )
-        println("Far position: (${farPosition.x()}, ${farPosition.y()}, ${farPosition.z()})")
+        objects.add(GameObject(Line.build(origin, end)))
+        objects.add(GameObject(Line.build(origin, endOpposite)))
+        objects.add(GameObject(Line.build(Vector3f(0.0f, 0.0f, 0.0f), origin)))
     }
 }
